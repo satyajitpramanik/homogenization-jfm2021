@@ -39,7 +39,7 @@ for iR = 1:length(Rs_obs)
     subplot(121)
     semilogy(phis,as,'-','Linewidth',1,'color',cc(iR,:)); 
   
-     semilogy(phis(1),as(1),'o','color', cc(iR,:), 'MarkerFaceColor', ...
+    semilogy(phis(1),as(1),'o','color', cc(iR,:), 'MarkerFaceColor', ...
          cc(iR,:),'Markersize',3) 
    
 end
@@ -63,7 +63,6 @@ patch('xdata', [Rsmin(1),Rsmin, Rmax, Rmax(end)] , 'ydata', ...
     'EdgeColor', 'none');
 
 hold on 
-
 semilogy([Rsmin(1) Rsmin(end)], [1,1],'-k', 'Linewidth',1)
 
 for iphi = 1:length(phis_obs)
@@ -80,8 +79,7 @@ for iphi = 1:length(phis_obs)
 end
 
 subplot(121)
-set(gca,'FontSize',10,'FontName','Times', ... %'FontWeight', 'Bold',...
-	'LineWidth',1,'TickDir','in')
+set(gca,'FontSize',10,'FontName','Times','LineWidth',1,'TickDir','in')
 set(gca,'XMinorTick','off')
 set(gca,'YMinorTick','on')
 box on
@@ -102,8 +100,7 @@ ylim([1e-2 1e1])
 xlim([0.2 1])
 
 subplot(122)
-set(gca,'FontSize',10,'FontName','Times', ... %'FontWeight', 'Bold',...
-	'LineWidth',1,'TickDir','in')
+set(gca,'FontSize',10,'FontName','Times','LineWidth',1,'TickDir','in')
 set(gca,'XMinorTick','off')
 set(gca,'YMinorTick','on')
 box on
@@ -138,8 +135,6 @@ annotation('textbox',...
     'FontName','Times',...
     'FitBoxToText','on');
 
-outdir = './';
-
 figure(fig1)
 
 figw = 13.5; % cm. Width of JFM printable area
@@ -161,4 +156,4 @@ set(gcf,'PaperUnits','centimeters')
 set(gcf,'PaperSize',[figw figh])
 set(gcf,'PaperPosition',[0 0 figw figh])
 
-print(gcf,'-dpdf',strcat([outdir,'/as_vs_phis_LCA.pdf'])); 
+print(gcf,'-dpdf','./figure4.pdf'); 
