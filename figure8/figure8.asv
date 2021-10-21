@@ -1,0 +1,332 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   figure 8
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+clear; clc; 
+close all; 
+
+lucy = 2;
+satya = 1;
+person  = satya; %satya; %lucy; 
+
+R = 0.4000;
+Pes = [0 1 5]; 
+cc = fliplr(parula(length(Pes)+1)); 
+ms = -0.3:0.3:0.3; 
+
+fig1 = figure(1); 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Plots steady state concentration
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+for im = 1:length(ms)
+
+    m = ms(im); 
+    
+    for iPe = 1:length(Pes)
+
+        Pe = Pes(iPe); 
+
+%         if m > 0
+%             if person == satya
+%                 cd '/Users/satya/Dropbox/Satya/matlab/patched_data/pos_grad';
+%             elseif person == lucy
+%                 cd '/Users/lucyauton/Dropbox/Post_docs/Satya/matlab/patched_data/pos_grad';
+%             end
+%         elseif m < 0
+%             if person == satya
+%                 cd '/Users/satya/Dropbox/Satya/matlab/patched_data/neg_grad';
+%             elseif person == lucy
+%                 cd '/Users/lucyauton/Dropbox/Post_docs/Satya/matlab/patched_data/neg_grad';
+%             end
+%         else
+%             if person == satya
+%                 cd '/Users/satya/Dropbox/Satya/matlab/patched_data/const_porosity';
+%             elseif person == lucy
+%                 cd '/Users/lucyauton/Dropbox/Post_docs/Satya/matlab/patched_data/const_porosity';
+%             end
+%         end
+% 
+%         filename = strcat(['Css_R0o',num2str(R*1E4),...
+%             'Pe',num2str(Pe*1E2),'_m',num2str(m*1E1),'.txt']);
+%         Css_bvp = importdata(filename);
+%         Css_bvp = Css_bvp.data;
+%         x = Css_bvp(:,1);
+%         Css = Css_bvp(:,2);
+
+        file = strcat(['Css_R0o',num2str(R*1E4),'Pe',num2str(Pe*1E2),...
+            '_m',num2str(m*1E1),'.txt']);
+        Css = importdata(file);
+        x = Css.data(:,1);
+        Css = Css.data(:,2);
+
+        subplot(221)
+        hold all; 
+        
+        if m > 0
+            plot(x,Css,'-','Linewidth',1,'color',cc(iPe,:))
+        elseif m == 0
+            plot(x,Css,':','Linewidth',1,'color',cc(iPe,:))
+        else
+            plot(x,Css,'--','Linewidth',1,'color',cc(iPe,:))
+        end
+        
+%         file = strcat(['/Users/satya/Dropbox/Satya/matlab/GitHub/figure8/Css_R0o',...
+%             num2str(R*1E4),'Pe',num2str(Pe*1E2),'_m',num2str(m*1E1),...
+%             '.txt']); 
+%         fid = fopen(file,'w'); 
+%         fprintf(fid,'%8s %8s\r\n','x','Css');
+%         fprintf(fid,'%26.20f %26.20f\n',[x';Css']);
+%         fclose(fid);
+
+    end
+
+end
+set(gca,'FontSize',10,'FontName','Times','LineWidth',0.5,'TickDir','in')
+box on
+
+xlim([0.0 1.0])
+set(gca,'XTick',0.0:0.1:1.0)
+set(gca,'XTickLabel',{'0','','0.2','','0.4','','0.6','','0.8','','1'})
+ylim([0.4 1])
+set(gca,'YTick',0.2:0.1:1.0)
+set(gca,'YTickLabel',{'0.2','','0.4','','0.6','','0.8','','1'})
+
+set(gca,'XMinorTick','off');
+set(gca,'YMinorTick','off');
+
+xl = xlabel('$\hat{x}_1$'); 
+xl.Interpreter = 'latex'; 
+xl.FontName = 'Times'; 
+xl.FontSize = 10; 
+
+yl = ylabel('$C^{(0)}$'); 
+yl.Interpreter = 'latex'; 
+yl.FontName = 'Times'; 
+yl.FontSize = 10; 
+
+annotation('textbox',...
+    [0.0 0.95 0.2 0.038],...
+    'String',{'(a)'},...
+    'LineStyle','none',...
+    'Interpreter','latex',...
+    'FontSize',10,...
+    'FontName','Times',...
+    'FitBoxToText','on');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Plots outlet concentration as a function of Peclet number
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if person == satya
+    cd '/Users/satya/Dropbox/Satya/matlab/patched_data/pos_grad';
+elseif person == lucy
+    cd '/Users/lucyauton/Dropbox/Post_docs/Satya/matlab/patched_data/pos_grad';
+end
+
+m = 0.3; 
+% filename = strcat('Cout_vs_Pe_R_0o',num2str(R*1E4),'_m_',...
+%         num2str(m*1E+1),'.txt');
+% Cout_bvp = importdata(filename);
+% Cout_bvp = Cout_bvp.data;
+% Pes = Cout_bvp(:,1);
+% Cout = Cout_bvp(:,2);
+
+subplot(222)
+semilogx(Pes,Cout,'-k','Linewidth',1)
+hold all
+
+file = strcat(['/Users/satya/Dropbox/Satya/matlab/GitHub/figure8/Cout_R0o',num2str(R*1E4),'_m_',...
+    num2str(m*1E1),'.txt']); 
+fid = fopen(file,'w'); 
+fprintf(fid,'%8s %8s\r\n','Pe','Cout');
+fprintf(fid,'%26.20f %26.20f\n',[Pes';Cout']);
+fclose(fid);
+
+if person == satya
+    cd '/Users/satya/Dropbox/Satya/matlab/patched_data/const_porosity';
+elseif person == lucy
+    cd '/Users/lucyauton/Dropbox/Post_docs/Satya/matlab/patched_data/const_porosity';
+end
+
+m = 0;
+filename = strcat('Cout_vs_Pe_R_0o',num2str(R*1E4),'_m_',...
+        num2str(m*1E+1),'.txt');
+Cout_bvp = importdata(filename);
+Cout_bvp = Cout_bvp.data;
+Pes_o = Cout_bvp(:,1);
+Cout_o = Cout_bvp(:,2);
+
+subplot(222)
+semilogx(Pes_o,Cout_o,':k','Linewidth',1)
+set(gca,'FontSize',10,'FontName','Times','LineWidth',0.5,'TickDir','in')
+box on
+
+file = strcat(['/Users/satya/Dropbox/Satya/matlab/GitHub/figure8/Cout_R0o',num2str(R*1E4),'_m_',...
+    num2str(m*1E1),'.txt']); 
+fid = fopen(file,'w'); 
+fprintf(fid,'%8s %8s\r\n','Pe','Cout');
+fprintf(fid,'%26.20f %26.20f\n',[Pes_o';Cout_o']);
+fclose(fid);
+
+if person == satya
+    cd '/Users/satya/Dropbox/Satya/matlab/patched_data/neg_grad';
+elseif person == lucy
+    cd '/Users/lucyauton/Dropbox/Post_docs/Satya/matlab/patched_data/neg_grad';
+end
+
+m = -0.3; 
+filename = strcat('Cout_vs_Pe_R_0o',num2str(R*1E4),'_m_',...
+        num2str(m*1E+1),'.txt');
+Cout_bvp = importdata(filename);
+Cout_bvp = Cout_bvp.data;
+Pes_neg = Cout_bvp(:,1);
+Cout_neg = Cout_bvp(:,2);
+
+subplot(222)
+semilogx(Pes_neg,Cout_neg,'--k','Linewidth',1)
+
+file = strcat(['/Users/satya/Dropbox/Satya/matlab/GitHub/figure8/Cout_R0o',num2str(R*1E4),'_m_',...
+    num2str(m*1E1),'.txt']); 
+fid = fopen(file,'w'); 
+fprintf(fid,'%8s %8s\r\n','Pe','Cout');
+fprintf(fid,'%26.20f %26.20f\n',[Pes_neg';Cout_neg']);
+fclose(fid);
+
+legend('$m_\phi>0$', '$m_\phi=0$', '$m_\phi<0$','Interpreter','latex',...
+    'FontSize',8,...
+    'FontName','Times', 'location', 'NorthWest', 'box', 'off')
+
+ylim([0.4 1])
+set(gca,'YTick',0.2:0.1:1.)
+set(gca,'YTickLabel',{'0.2','','0.4','','0.6','','0.8','','1'})
+
+set(gca,'XMinorTick','on');
+set(gca,'YMinorTick','off');
+
+xl = xlabel('$Pe$'); 
+xl.Interpreter = 'latex'; 
+xl.FontName = 'Times'; 
+xl.FontSize = 10; 
+
+yl = ylabel('$C_{\rm out}^{(0)}$'); 
+yl.Interpreter = 'latex'; 
+yl.FontName = 'Times'; 
+yl.FontSize = 10;  
+
+annotation('textbox',...
+    [0.09 0.945 0.2 0.038],...
+    'String',{'(a)'},...
+    'LineStyle','none',...
+    'Interpreter','latex',...
+    'FontSize',10,...
+    'FontName','Times',...
+    'FitBoxToText','on');
+
+annotation('textbox',...
+    [0.57 0.945 0.2 0.038],...
+    'String',{'(b)'},...
+    'LineStyle','none',...
+    'Interpreter','latex',...
+    'FontSize',10,...
+    'FontName','Times',...
+    'FitBoxToText','on');
+
+ annotation('textbox',...
+    [0.09 0.625 0.2 0.038],...
+    'String',{'(c)'},...
+    'LineStyle','none',...
+    'Interpreter','latex',...
+    'FontSize',10,...
+    'FontName','Times',...
+    'FitBoxToText','on');
+
+annotation('textbox',...
+    [0.57 0.625 0.2 0.038],...
+    'String',{'(d)'},...
+    'LineStyle','none',...
+    'Interpreter','latex',...
+    'FontSize',10,...
+    'FontName','Times',...
+    'FitBoxToText','on');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure(fig1)
+
+figw = 13.5; % cm. Width of JFM printable area
+subfigw = 0.38; % Fraction of figw
+subfigh = 0.75; % Fraction of figh
+padleft = 0.11; % Fraction of figw
+padbottom = 0.2; % Fraction of figw
+padbetween = 0.10; % Fraction of figw
+figh = figw/(2.25); %(2*padbottom + 4*subfigh + 3*padbetween)*figw;
+
+subplot(221)
+set(gca,'Position',[padleft,padbottom,subfigw,subfigh])
+
+subplot(222)
+set(gca,'Position',[padleft+(subfigw+padbetween),padbottom,...
+    subfigw,subfigh])
+
+set(gcf,'PaperUnits','centimeters')
+set(gcf,'PaperSize',[figw figh])
+set(gcf,'PaperPosition',[0 0 figw figh])
+if person == satya
+    outdir = '/Users/satya/Dropbox/Satya/matlab/plots/';
+elseif person == lucy
+    outdir = '/Users/lucyauton/Dropbox/Post_docs/Satya/matlab/plots/';
+end
+print(gcf,'-dpdf',strcat([outdir,'Css_R_0o',num2str(R*1E4),'_new.pdf']));
+
+% a = 1; 
+% %ms = -0.3:0.3:0.3; 
+% ms = 0.3:-.3:-0.3;
+% 
+% % PesA = [0 1 5]; 
+% % Pes = 1; 
+% % cc = fliplr(parula(length(Pes)+1)); 
+% cc = fliplr(parula(length(ms)+1)); 
+
+% fig1 = figure(1); 
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %   Plots steady state concentration
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% if person == satya
+%     cd '/Users/satya/Dropbox/Satya/matlab/patched_data/pos_grad';
+% elseif person == lucy
+%     cd '/Users/lucyauton/Dropbox/Post_docs/Satya/matlab/patched_data/pos_grad';
+% end
+% 
+% m = 0.3; 
+% filename = strcat(['Cout_vs_Pe_m_',num2str(m*1E+1),'.txt']);
+% Cout_bvp = importdata(filename);
+% Cout_bvp = Cout_bvp.data;
+% PesA = Cout_bvp(:,1);
+% CoutA = Cout_bvp(:,2);
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% figure(fig1)
+% 
+% figw = 13.5; % cm. Width of JFM printable area
+% subfigw = 0.38; % Fraction of figw
+% subfigh = 0.75; % Fraction of figh
+% padleft = 0.11; % Fraction of figw
+% padbottom = 0.2; % Fraction of figw
+% padbetween = 0.10; % Fraction of figw
+% figh = figw/(2.25); %(2*padbottom + 4*subfigh + 3*padbetween)*figw;
+% 
+% subplot(121)
+% set(gca,'Position',[padleft,padbottom,subfigw,subfigh])
+% 
+% subplot(122)
+% set(gca,'Position',[padleft+(subfigw+padbetween),padbottom,...
+%     subfigw,subfigh])
+% 
+% set(gcf,'PaperUnits','centimeters')
+% set(gcf,'PaperSize',[figw figh])
+% set(gcf,'PaperPosition',[0 0 figw figh])
+% outdir = '/Users/satya/Dropbox/Satya/matlab/GitHub/figure8/'; 
+% 
+% print(gcf,'-dpdf',strcat([outdir,'figure8.pdf'])); 
